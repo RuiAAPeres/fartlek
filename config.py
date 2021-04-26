@@ -11,7 +11,7 @@ class Config(object):
 
 
 class ProductionConfig(Config):
-    SANDOX = False
+    SANDOX = True
 
 
 class DevelopmentConfig(Config):
