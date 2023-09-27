@@ -92,12 +92,16 @@ def registerUser() -> Response:
         return challengeOutcome
 
     try:
+        print("athelete_id")
         athleteId = request.json["athlete_id"]
         token = request.json["token"]
         value = AthleteNotifications(id=athleteId, token=token)
 
+        print("merge value")
         db.session.merge(value)
+        print("commiting")
         db.session.commit()
+        print("commiting done")
         return Response("Added", 201)
 
     except SQLAlchemyError as error:
