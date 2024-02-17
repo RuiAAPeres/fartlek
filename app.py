@@ -16,6 +16,14 @@ app.config.from_object(configuration)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
+client = APNsClient(
+    team_id=os.environ['TEAM_ID'],
+    bundle_id=os.environ['BUNDLE_ID'],
+    auth_key_id=os.environ['APNS_KEY_ID'],
+    auth_key=os.environ['APNS_TOKEN'],
+    use_sandbox=configuration.SANDOX
+)
+
 from models import *
 
 def check_challenge(key: str) -> Optional[Response]:
@@ -57,14 +65,6 @@ def update() -> Response:
         if athlete is None:
             # Strava's API expects a 200
             return Response('User not found', 200)
-
-        client = APNsClient(
-            team_id=os.environ['TEAM_ID'],
-            bundle_id=os.environ['BUNDLE_ID'],
-            auth_key_id=os.environ['APNS_KEY_ID'],
-            auth_key=os.environ['APNS_TOKEN'],
-            use_sandbox=configuration.SANDOX
-        )
 
         client.send_message(
             athlete.token,
